@@ -25,7 +25,7 @@ namespace RemittanceAPI.V1.Controllers
             _remittanceService = remittanceService;
         }
 
-        /* 
+        /* TODO: responses
          * 200/201 Success
             400 Invalid Request
             401 Unauthorized
@@ -33,6 +33,7 @@ namespace RemittanceAPI.V1.Controllers
             440 Failed
             503 Service Unavailable
          *
+         * return type may be ActionResult<model> ??
          */
 
         [HttpPost("get-exchange-rate")]
@@ -40,13 +41,9 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(ExchangeRateResponse), StatusCodes.Status200OK)] //200, 201 OK
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<ExchangeRateResponse> GetExchangeRate(
-            [FromQuery]
-            [Optional][DefaultParameterValue("US")]string from, 
-            [Required] string to)
+        public async Task<ExchangeRateResponse> GetExchangeRate([FromBody] ExchangeRateRequest request)
         {
-            var request = new ExchangeRateRequest {From = from, To = to};
-            return _remittanceService.FindExchangeRate(request);
+            return await _remittanceService.FindExchangeRate(request);
         }
 
         [HttpPost("get-country-list")]
@@ -64,11 +61,8 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(IEnumerable<FeeResponse>), StatusCodes.Status200OK)] //200, 201 OK
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<FeeResponse>> GetFeeList([FromQuery]
-            [Optional][DefaultParameterValue("US")]string from,
-            [Required] string to)
+        public async Task<IEnumerable<FeeResponse>> GetFeeList([FromBody] FeeRequest request)
         {
-            var request = new FeeRequest() { From = from, To = to };
             return await _remittanceService.GetFees(request);
         }
 
@@ -81,7 +75,7 @@ namespace RemittanceAPI.V1.Controllers
         public async Task<string> SubmitTransaction([FromBody] TransactionRequest request)
         {
             // var result = await _remittanceService.SubmitTransaction(request);
-            // return Ok(result);
+            // return Ok(result); ??
 
             return await _remittanceService.SubmitTransaction(request);
         }
@@ -103,9 +97,6 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<StatusResponse> GetTransactionStatus([FromBody] StatusRequest request)
         {
-            // var result = await _remittanceService.GetTransactionStatus(request);
-            // return Ok(result);
-
             request.TransactionId = Guid.NewGuid().ToString();
             return await _remittanceService.GetTransactionStatus(request);
         }
@@ -125,7 +116,7 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(IEnumerable<BankResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<BankResponse>> GetBeneficiaryName([FromBody] BankRequest request)
+        public async Task<IEnumerable<BankResponse>> GetBankList([FromBody] BankRequest request)
         {
             return await _remittanceService.GetBankList(request);
         }

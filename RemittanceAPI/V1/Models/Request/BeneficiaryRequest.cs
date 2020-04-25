@@ -2,7 +2,7 @@
 
 namespace RemittanceAPI.V1.Models.Request
 {
-    public class BeneficiaryRequest
+    public class BeneficiaryRequest 
     {
         [Required]
         public string AccountNumber { get; set; }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Connections;
+using RemittanceAPI.Operations;
 using RemittanceAPI.V1.Models.Request;
 using RemittanceAPI.V1.Models.Response;
 
@@ -10,102 +9,57 @@ namespace RemittanceAPI.Service
 {
     public class RemittanceService : IRemittanceService
     {
-        //Task<ExchangeRateResponse>
-        public ExchangeRateResponse FindExchangeRate(ExchangeRateRequest request)
+        
+        private readonly ITransactionOperation _transactionOperation;
+        private readonly IInformationOperation _informationOperation;
+
+        public RemittanceService (ITransactionOperation transactionOperation, IInformationOperation informationOperation)
         {
-            string from = request.From;
-            string to = request.To;
-
-            // DB works...
-            //ExchangeRateResponse response = dao.findExchangeRatesByFromAndTo(from,to)
-
-            return new ExchangeRateResponse
-            {
-                DestinationCountry = to,
-                ExchangeRate = "1.2", //use decimal here & Math.Round(per, 3)
-                ExchangeRateToken = "123Ef5",
-                SourceCountry = from
-            };
+            _transactionOperation = transactionOperation;
+            _informationOperation = informationOperation;
         }
 
-        public async Task<IEnumerable<Country>> GetCountries() //TODO: parameter = access key ?
-        {
-            var countries = new Country[3];;
-            var c1 = new Country { Code = "US", Name = "America" };
-            var c2 = new Country { Code = "SE",  Name = "Sweden"};
-            var c3 = new Country { Code = "TR", Name = "Turkey" };
-            countries[0] = c1;
-            countries[1] = c2;
-            countries[2] = c3;
+        //TODO: parameter = access key for all ??
+        // TODO: Error responses and messages for all
 
-            return countries;
+        public async Task<ExchangeRateResponse> FindExchangeRate(ExchangeRateRequest exchangeRateRequest)
+        {
+            return _transactionOperation.FindExchangeRate(exchangeRateRequest);
         }
 
-        public async Task<IEnumerable<FeeResponse>> GetFees(FeeRequest request) //TODO: parameter = access key ?
+        public async Task<IEnumerable<Country>> GetCountries() 
         {
-
-            //TODO: get fee & amount values from the DB according to the request model
-
-            var fees = new FeeResponse[3]; ;
-            var f1 = new FeeResponse { Amount = 100, Fee = 0 };
-            var f2 = new FeeResponse { Amount = 200, Fee = 2 };
-            var f3 = new FeeResponse { Amount = 500, Fee = 6 };
-            fees[0] = f1;
-            fees[1] = f2;
-            fees[2] = f3;
-
-            return fees;
+            return await _informationOperation.GetCountryList();
         }
 
-        public async Task<string> SubmitTransaction(TransactionRequest request) //TODO: parameter = access key ?
+        public async Task<IEnumerable<FeeResponse>> GetFees(FeeRequest feeRequest) 
         {
+            return await _informationOperation.GetFees(feeRequest);
+        }
 
-            // submit the transaction and return the transaction id as a response
-
-            return Guid.NewGuid().ToString();
+        public async Task<string> SubmitTransaction(TransactionRequest transactionRequest) 
+        {
+            return _transactionOperation.SubmitTransaction(transactionRequest);
         }
 
         public async Task<IEnumerable<State>> GetStateList()
         {
-            var states = new State[3]; ;
-            var s1 = new State { Code = "TX", Name = "Texas" };
-            var s2 = new State { Code = "NY", Name = "New York" };
-            var s3 = new State { Code = "AK", Name = "Alaska" };
-            states[0] = s1;
-            states[1] = s2;
-            states[2] = s3;
-
-            return states;
+            return await _informationOperation.GetStateList();
         }
 
-        public async Task<StatusResponse> GetTransactionStatus(StatusRequest request)
+        public async Task<StatusResponse> GetTransactionStatus(StatusRequest statusRequest)
         {
-            StatusResponse response = new StatusResponse();
-            response.Status = "Completed";
-            response.TransactionId = request.TransactionId;
-
-            return response;
+            return _transactionOperation.GetTransactionStatus(statusRequest);
         }
 
-        public async Task<BeneficiaryResponse> GetBeneficiaryName(BeneficiaryRequest request)
+        public async Task<BeneficiaryResponse> GetBeneficiaryName(BeneficiaryRequest beneficiaryRequest)
         {
-            BeneficiaryResponse response = new BeneficiaryResponse();
-            response.AccountName = "My account";
-
-            return response;
+            return _transactionOperation.GetBeneficiaryName(beneficiaryRequest);
         }
 
-        public async Task<IEnumerable<BankResponse>> GetBankList(BankRequest request)
+        public async Task<IEnumerable<BankResponse>> GetBankList(BankRequest bankRequest)
         {
-            var banks = new BankResponse[3]; ;
-            var b1 = new BankResponse { Code = "TX", Name = "Texas Bank" };
-            var b2 = new BankResponse { Code = "NY", Name = "NY Bank" };
-            var b3 = new BankResponse { Code = "AK", Name = "Alsk Bank" };
-            banks[0] = b1;
-            banks[1] = b2;
-            banks[2] = b3;
-
-            return banks;
+            return await _informationOperation.GetBankList(bankRequest);
         }
     }
 }

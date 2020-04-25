@@ -11,7 +11,7 @@ namespace RemittanceAPI.Service
     {
         //TODO: access key as a parameter for all
 
-        public ExchangeRateResponse FindExchangeRate(ExchangeRateRequest request);
+        public Task<ExchangeRateResponse> FindExchangeRate(ExchangeRateRequest request);
         public Task<IEnumerable<Country>> GetCountries(); 
         public Task<IEnumerable<FeeResponse>> GetFees(FeeRequest request);
         public Task<string> SubmitTransaction(TransactionRequest request);
