@@ -12,6 +12,8 @@ namespace RemittanceAPI.V1.Models.Request
 {
     public class ExchangeRateRequest
     {
+        [Required]
+        public string AccessKey { get; set; }
         public string From { get; set; }
         [Required]
         public string To { get; set; }

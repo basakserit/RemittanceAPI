@@ -3,8 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RemittanceAPI.V1.Models.Request
 {
-    public class TransactionRequest
+    public class TransactionRequest 
     {
+        [Required]
+        public string AccessKey { get; set; }
         [Required]
         public string SenderFirstName { get; set; }
         [Required]

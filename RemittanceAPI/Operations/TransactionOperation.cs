@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using RemittanceAPI.Helper;
+using RemittanceAPI.Provider;
 using RemittanceAPI.V1.Models.Request;
 using RemittanceAPI.V1.Models.Response;
 
@@ -10,12 +11,15 @@ namespace RemittanceAPI.Operations
     public class TransactionOperation : ITransactionOperation
     {
         private readonly IExchangeRateValidator _iExchangeRateValidator;
+        private readonly IThirdPartyProvider _thirdPartyProvider;
         //private readonly IExchangeRateDao _iExchangeRateDao;
 
-        public TransactionOperation(IExchangeRateValidator iExchangeRateValidator)
+        public TransactionOperation(IExchangeRateValidator iExchangeRateValidator, IThirdPartyProvider thirdPartyProvider)
         {
             _iExchangeRateValidator = iExchangeRateValidator;
+            _thirdPartyProvider = thirdPartyProvider;
         }
+        
         public ExchangeRateResponse FindExchangeRate(ExchangeRateRequest exchangeRateRequest)
         {
             _iExchangeRateValidator.ValidateRequestModel(exchangeRateRequest);
@@ -23,9 +27,8 @@ namespace RemittanceAPI.Operations
             string from = exchangeRateRequest.From;
             string to = exchangeRateRequest.To;
 
-            // DB works...
-            //ExchangeRateResponse response = _iExchangeRateDao.findExchangeRatesByFromAndTo(from,to)
 
+            //return _thirdPartyProvider.GetExchangeRate(exchangeRateRequest);
             return new ExchangeRateResponse
             {
                 DestinationCountry = to,
