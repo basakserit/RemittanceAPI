@@ -106,7 +106,7 @@ namespace RemittanceAPI
 
             app.UseAuthorization();
 
-            // app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseEndpoints(endpoints =>
             {

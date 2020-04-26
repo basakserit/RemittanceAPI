@@ -63,6 +63,14 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IEnumerable<FeeResponse>> GetFeeList([FromBody] FeeRequest request)
         {
+            //authorization check
+            // if not authorized > return 401 unauthorized
+
+            // from and to should be a valid country code, validate with the country codes in the db
+            // if not valid model > return 400 invalid request
+
+             // 403? 503? 440?
+
             return await _remittanceService.GetFees(request);
         }
 
