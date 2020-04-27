@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using RemittanceAPI.Helper;
 using RemittanceAPI.Provider;
 using RemittanceAPI.V1.Models.Request;
 using RemittanceAPI.V1.Models.Response;
@@ -10,58 +10,47 @@ namespace RemittanceAPI.Operations
 {
     public class TransactionOperation : ITransactionOperation
     {
-        private readonly IExchangeRateValidator _iExchangeRateValidator;
         private readonly IThirdPartyProvider _thirdPartyProvider;
         //private readonly IExchangeRateDao _iExchangeRateDao;
 
-        public TransactionOperation(IExchangeRateValidator iExchangeRateValidator, IThirdPartyProvider thirdPartyProvider)
+        public TransactionOperation(IThirdPartyProvider thirdPartyProvider)
         {
-            _iExchangeRateValidator = iExchangeRateValidator;
             _thirdPartyProvider = thirdPartyProvider;
         }
         
-        public ExchangeRateResponse FindExchangeRate(ExchangeRateRequest exchangeRateRequest)
+        public async Task<ExchangeRateResponse> FindExchangeRate(ExchangeRateRequest exchangeRateRequest)
         {
-            _iExchangeRateValidator.ValidateRequestModel(exchangeRateRequest);
+            // return new ExchangeRateResponse
+            // {
+            //     DestinationCountry = to,
+            //     ExchangeRate = "1.2", //should be decimal & Math.Round(per, 3)
+            //     ExchangeRateToken = "123Ef5",
+            //     SourceCountry = from
+            // };
 
-            string from = exchangeRateRequest.From;
-            string to = exchangeRateRequest.To;
-
-
-            //return _thirdPartyProvider.GetExchangeRate(exchangeRateRequest);
-            return new ExchangeRateResponse
-            {
-                DestinationCountry = to,
-                ExchangeRate = "1.2", //should be decimal & Math.Round(per, 3)
-                ExchangeRateToken = "123Ef5",
-                SourceCountry = from
-            };
+            return await _thirdPartyProvider.GetExchangeRate(exchangeRateRequest);
         }
 
-        public BeneficiaryResponse GetBeneficiaryName(BeneficiaryRequest beneficiaryRequest)
+        public async Task<BeneficiaryResponse> GetBeneficiaryName(BeneficiaryRequest beneficiaryRequest)
         {
             // DB works...   (this may be in the other operation class)
             //BeneficiaryResponse response = _iAccountDao.GetBeneficiaryName(accountNumber, bankCode)
 
-            BeneficiaryResponse response = new BeneficiaryResponse();
-            response.AccountName = "My account";
 
-            return response;
+            // return new BeneficiaryResponse(){AccountName = "My account"};
+            return await _thirdPartyProvider.GetBeneficiaryName(beneficiaryRequest);
         }
 
-        public StatusResponse GetTransactionStatus(StatusRequest statusRequest)
+        public async Task<StatusResponse> GetTransactionStatus(StatusRequest statusRequest)
         {
             // DB works...
-            //StatusResponse response = _iTransactionDTO.GetTransactionStatus(transactionId)
+            //StatusResponse response = _iTransactionDTO.GetTransactionById(transactionId)
 
-            StatusResponse response = new StatusResponse();
-            response.Status = "Completed";
-            response.TransactionId = statusRequest.TransactionId;
-
-            return response;
+            // return new StatusResponse() {Status = "Completed", TransactionId = statusRequest.TransactionId};
+            return await _thirdPartyProvider.GetTransactionStatus(statusRequest);
         }
 
-        public string SubmitTransaction(TransactionRequest transactionRequest)
+        public async Task<string> SubmitTransaction(TransactionRequest transactionRequest)
         {
             // _iTransactionValidator.ValidateTransactionModel(transactionRequest);
 
@@ -71,7 +60,8 @@ namespace RemittanceAPI.Operations
             // DB works...
             //var response = _iTransactionDAO.CreateTransaction(transactionModel);
 
-            return Guid.NewGuid().ToString();
+            // return Guid.NewGuid().ToString();
+            return await _thirdPartyProvider.SubmitTransaction(transactionRequest);
         }
     }
 }

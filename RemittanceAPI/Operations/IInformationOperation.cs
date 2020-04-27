@@ -11,7 +11,7 @@ namespace RemittanceAPI.Operations
 
         public Task<IEnumerable<FeeResponse>> GetFees(FeeRequest request);
 
-        public Task<IEnumerable<State>> GetStateList();
+        public Task<IEnumerable<StateResponse>> GetStateList();
 
         public Task<IEnumerable<BankResponse>> GetBankList(BankRequest request);
     }

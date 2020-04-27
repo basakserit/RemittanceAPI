@@ -98,6 +98,14 @@ namespace RemittanceAPI.Provider
                     var errorMessage = JsonConvert
                         .DeserializeObject<ThirdPartyProviderErrorMessage>(result.Content.ToString()).Error;
                     throw new ThirdPartyException(errorMessage);
+
+                    //TODO: format error message with the code
+                    /*
+                     *     440 Failed
+                           {
+                           “error”: “Failed to get transaction status”
+                           }
+                     */
             }
         }
     }

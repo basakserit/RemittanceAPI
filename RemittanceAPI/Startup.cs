@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RemittanceAPI.Helper;
 using RemittanceAPI.Operations;
 using RemittanceAPI.Service;
 using RemittanceAPI.Validators;
@@ -78,7 +77,6 @@ namespace RemittanceAPI
             });
 
             services.AddTransient<IRemittanceService, RemittanceService>();
-            services.AddTransient<IExchangeRateValidator, ExchangeRateValidator>();
             services.AddTransient<ITransactionOperation, TransactionOperation>();
             services.AddTransient<IInformationOperation, InformationOperation>();
 

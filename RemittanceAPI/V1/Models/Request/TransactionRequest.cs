@@ -1,56 +1,56 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using RemittanceAPI.Validators;
 
 namespace RemittanceAPI.V1.Models.Request
 {
     public class TransactionRequest 
     {
-        [Required]
+        [Required] 
         public string AccessKey { get; set; }
-        [Required]
+        [Required] 
         public string SenderFirstName { get; set; }
-        [Required]
+        [Required] 
         public string SenderLastName { get; set; }
-        [Required]
+        [Required] 
         public string SenderEmail { get; set; }
-        [Required]
+        [Required] 
         public string SenderPhone { get; set; }
-        [Required]
+        [Required] 
         public string SenderAddress { get; set; }
-        [Required]
-        [StringLength(2)]
+        [Required, CountryValidator(ErrorMessage = "Country code should be valid.")] 
         public string SenderCountry { get; set; }
-        [Required]
+        [Required] 
         public string SenderCity { get; set; }
-        [Required]
+        [Required] 
         public string SendFromState { get; set; }
-        [Required]
+        [Required] 
         public string SenderPostalCode { get; set; }
-        [Required]
-        public string DateOfBirth { get; set; } //TODO format: YYYY-MM-DD
-        [Required]
+        [Required, DateOfBirthValidator(ErrorMessage = "Birthdate should be YYY-MM-DD format.")]
+        public string DateOfBirth { get; set; }
+        [Required] 
         public string ToFirstName { get; set; }
-        [Required]
+        [Required] 
         public string ToLastName { get; set; }
-        [Required, StringLength(2)]
+        [Required, CountryValidator(ErrorMessage = "Country code should be valid.")] 
         public string ToCountry { get; set; }
-        [Required]
+        [Required] 
         public string ToBankAccountName { get; set; }
-        [Required]
+        [Required] 
         public string ToBankAccountNumber { get; set; }
-        [Required]
+        [Required] 
         public string ToBankName { get; set; }
-        [Required]
+        [Required] 
         public string ToBankCode { get; set; }
-        [Required]
+        [Required] 
         public string FromAmount { get; set; }
         [Required]
         public string ExchangeRate { get; set; }
-        [Required, DefaultValue(0)]
-        public int Fees { get; set; }
+        [Required] 
+        public int Fees { get; set; } = 0;
         [Required, MinLength(10), MaxLength(25)]
         public string TransactionNumber { get; set; }
-        [Required, StringLength(3)]
+        [Required, CurrencyValidator(ErrorMessage = "Currency code should be valid.")]
         public string FromCurrency { get; set; }
     }
 }
