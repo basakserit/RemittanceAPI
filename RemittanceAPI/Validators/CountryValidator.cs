@@ -10,19 +10,13 @@ namespace RemittanceAPI.Validators
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            try
-            {
-                var regex = new Regex(@"^[A-Z]{2}$");
-                var countryCode = value as string;
-                if (string.IsNullOrEmpty(countryCode) || !regex.IsMatch(countryCode))
-                    return new ValidationResult(ErrorMessage);
-            }
-            catch
-            {
-                return new ValidationResult(ErrorMessage);
-            }
+            var regex = new Regex(@"^[A-Z]{2}$");
+            var countryCode = value as string;
 
-            return ValidationResult.Success;
+            if (!string.IsNullOrEmpty(countryCode) && regex.IsMatch(countryCode))
+                return ValidationResult.Success;
+
+            return new ValidationResult(ErrorMessage);
         }
     }
 

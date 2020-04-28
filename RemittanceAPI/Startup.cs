@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RemittanceAPI.Operations;
+using RemittanceAPI.Provider;
 using RemittanceAPI.Service;
 using RemittanceAPI.Validators;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -76,9 +76,12 @@ namespace RemittanceAPI
                 });
             });
 
-            services.AddTransient<IRemittanceService, RemittanceService>();
-            services.AddTransient<ITransactionOperation, TransactionOperation>();
-            services.AddTransient<IInformationOperation, InformationOperation>();
+            services.AddTransient<IThirdPartyProvider, FakeThirdPartyProvider>();
+            // services.AddTransient<IThirdPartyProvider, ThirdPartyProvider>();
+            services.AddTransient<IBeneficiaryManagementService, BeneficiaryManagementService>();
+            services.AddTransient<IConfigurationService, ConfigurationService>();
+            services.AddTransient<ITransactionCalculatorService, TransactionCalculatorService>();
+            services.AddTransient<ITransactionService, TransactionService>();
 
             services.AddControllers();
         }

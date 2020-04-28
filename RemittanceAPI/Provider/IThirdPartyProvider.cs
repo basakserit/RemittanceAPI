@@ -6,7 +6,7 @@ namespace RemittanceAPI.Provider
 {
     public interface IThirdPartyProvider
     {
-        public Task<Country[]> GetCountries(string accessKey);
+        public Task<CountryResponse[]> GetCountries(string accessKey);
 
         public Task<BankResponse[]> GetBanks(BankRequest bankRequest);
 

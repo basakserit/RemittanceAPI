@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RemittanceAPI.Exceptions;
+using RemittanceAPI.Service;
 using RemittanceAPI.V1.Models.Request;
 using RemittanceAPI.V1.Models.Response;
 
@@ -13,21 +14,28 @@ namespace RemittanceAPI.Provider
 {
     public class ThirdPartyProvider : IThirdPartyProvider
     {
-        public async Task<Country[]> GetCountries(string accessKey)
+        private readonly IConfigurationService _configurationService;
+
+        public ThirdPartyProvider(IConfigurationService configurationService)
+        {
+            _configurationService = configurationService;
+        }
+
+        public async Task<CountryResponse[]> GetCountries(string accessKey)
         {
             using var client = new HttpClient();
             var request = $"{{accessKey: {accessKey}}}";
-            var result = await client.PostAsync($"{ConfigurationManager.AppSettings["ProviderBaseUrl"]}/get-countries",
+            var result = await client.PostAsync($"{_configurationService.ThirdPartyRemittanceServiceUrl}/get-countries",
                 new StringContent(request, Encoding.UTF8, MediaTypeNames.Application.Json));
 
-            return EvaluateCall<Country[]>(result);
+            return EvaluateCall<CountryResponse[]>(result);
         }
         public async Task<BankResponse[]> GetBanks(BankRequest bankRequest)
         {
             using var client = new HttpClient();
             var requestJson = JsonConvert.SerializeObject(bankRequest);
             // var request = $"{{accessKey: {accessKey}, country: {country}}}";
-            var result = await client.PostAsync($"{ ConfigurationManager.AppSettings["ProviderBaseUrl"]}/get-bank-list",
+            var result = await client.PostAsync($"{_configurationService.ThirdPartyRemittanceServiceUrl}/get-bank-list",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
 
             return EvaluateCall<BankResponse[]>(result);
@@ -37,7 +45,7 @@ namespace RemittanceAPI.Provider
         {
             using var client = new HttpClient();
             var requestJson = JsonConvert.SerializeObject(exchangeRateRequest);
-            var result = await client.PostAsync($"{ ConfigurationManager.AppSettings["ProviderBaseUrl"]}/get-exchange-rate",
+            var result = await client.PostAsync($"{ _configurationService.ThirdPartyRemittanceServiceUrl}/get-exchange-rate",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
             return EvaluateCall<ExchangeRateResponse>(result);
         }
@@ -46,7 +54,7 @@ namespace RemittanceAPI.Provider
         {
             using var client = new HttpClient();
             var requestJson = JsonConvert.SerializeObject(feeRequest);
-            var result = await client.PostAsync($"{ ConfigurationManager.AppSettings["ProviderBaseUrl"]}/get-fees-list",
+            var result = await client.PostAsync($"{ _configurationService.ThirdPartyRemittanceServiceUrl}/get-fees-list",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
             return EvaluateCall<FeeResponse[]>(result);
         }
@@ -55,7 +63,7 @@ namespace RemittanceAPI.Provider
         {
             using var client = new HttpClient();
             var request = $"{{accessKey: {accessKey}}}";
-            var result = await client.PostAsync($"{ ConfigurationManager.AppSettings["ProviderBaseUrl"]}/get-state-list",
+            var result = await client.PostAsync($"{_configurationService.ThirdPartyRemittanceServiceUrl}/get-state-list",
                 new StringContent(request, Encoding.UTF8, MediaTypeNames.Application.Json));
             return EvaluateCall<StateResponse[]>(result);
         }
@@ -64,7 +72,7 @@ namespace RemittanceAPI.Provider
         {
             using var client = new HttpClient();
             var requestJson = JsonConvert.SerializeObject(transactionRequest);
-            var result = await client.PostAsync($"{ ConfigurationManager.AppSettings["ProviderBaseUrl"]}/get-fees-list",
+            var result = await client.PostAsync($"{_configurationService.ThirdPartyRemittanceServiceUrl}/get-fees-list",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
             return EvaluateCall<string>(result);
         }
@@ -73,7 +81,7 @@ namespace RemittanceAPI.Provider
         {
             using var client = new HttpClient();
             var requestJson = JsonConvert.SerializeObject(statusRequest);
-            var result = await client.PostAsync($"{ ConfigurationManager.AppSettings["ProviderBaseUrl"]}/get-transaction-status",
+            var result = await client.PostAsync($"{ _configurationService.ThirdPartyRemittanceServiceUrl}/get-transaction-status",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
             return EvaluateCall<StatusResponse>(result);
         }
@@ -82,7 +90,7 @@ namespace RemittanceAPI.Provider
         {
             using var client = new HttpClient();
             var requestJson = JsonConvert.SerializeObject(beneficiaryRequest);
-            var result = await client.PostAsync($"{ ConfigurationManager.AppSettings["ProviderBaseUrl"]}/get-beneficiary-name",
+            var result = await client.PostAsync($"{_configurationService.ThirdPartyRemittanceServiceUrl}/get-beneficiary-name",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
             return EvaluateCall<BeneficiaryResponse>(result);
         }

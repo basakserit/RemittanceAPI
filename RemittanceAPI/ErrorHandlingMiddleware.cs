@@ -36,9 +36,6 @@ namespace RemittanceAPI
             var code = HttpStatusCode.InternalServerError;
             var message = "Internal server error";
 
-
-            //TODO: 400, 401, 403, 440, 503 errors
-     
             var result = JsonConvert.SerializeObject(new ErrorResponse { Message = message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
