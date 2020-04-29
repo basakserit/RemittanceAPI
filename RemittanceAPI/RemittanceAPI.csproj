@@ -5,17 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dao\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="4.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="NHibernate" Version="5.2.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RemittanceAPI.Entity\RemittanceAPI.Entity.csproj" />
   </ItemGroup>
 
 

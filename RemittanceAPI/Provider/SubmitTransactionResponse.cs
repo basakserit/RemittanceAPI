@@ -1,11 +1,11 @@
 ﻿using System;
 using RemittanceAPI.Entity;
 
-namespace RemittanceAPI.V1.Models.Response
+namespace RemittanceAPI.Provider
 {
-    public class StatusResponse
+    public class SubmitTransactionResponse
     {
-        public Guid TransactionId { get; set; } 
+        public Guid TransactionId { get; set; }
         public TransactionStatus TransactionStatus { get; set; }
     }
 }

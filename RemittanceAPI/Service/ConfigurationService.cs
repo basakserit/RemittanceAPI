@@ -6,7 +6,7 @@ namespace RemittanceAPI.Service
     {
         public string ThirdPartyRemittanceServiceUrl => ConfigurationManager.AppSettings["base_url"];
 
-        public string AccessKey => ConfigurationManager.AppSettings["AccessKey123"];
+        public string AccessKey => ConfigurationManager.AppSettings["accessKey123"];
 
     }
 }

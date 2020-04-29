@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -27,12 +26,12 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(BeneficiaryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public IActionResult GetBeneficiaryName([FromQuery] BeneficiaryRequest request)
+        public async Task<IActionResult> GetBeneficiaryName([FromQuery] BeneficiaryRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(_beneficiaryManagementService.GetBeneficiaryName(request).Result);
+            return Ok(await _beneficiaryManagementService.GetBeneficiaryName(request));
         }
 
         [HttpGet("GetCountryList")]
@@ -40,12 +39,12 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(ICollection<CountryResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public IActionResult GetCountryList([Required, FromQuery] string accessKey)
+        public async Task<IActionResult> GetCountryList([Required, FromQuery] string accessKey)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(_beneficiaryManagementService.GetCountries(accessKey).Result);
+            return Ok(await _beneficiaryManagementService.GetCountries(accessKey));
         }
 
         [HttpGet("GetStateList")]
@@ -53,12 +52,12 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(IEnumerable<StateResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public IActionResult GetStateList([Required, FromQuery] string accessKey)
+        public async Task<IActionResult> GetStateList([Required, FromQuery] string accessKey)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(_beneficiaryManagementService.GetStateList(accessKey).Result);
+            return Ok(await _beneficiaryManagementService.GetStateList(accessKey));
         }
 
 
@@ -67,12 +66,12 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(IEnumerable<BankResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public IActionResult GetBankList([FromQuery] BankRequest request)
+        public async Task<IActionResult> GetBankList([FromQuery] BankRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(_beneficiaryManagementService.GetBankList(request).Result);
+            return Ok(await _beneficiaryManagementService.GetBankList(request));
         }
     }
 }

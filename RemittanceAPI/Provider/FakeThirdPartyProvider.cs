@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using RemittanceAPI.Entity;
 using RemittanceAPI.V1.Models.Request;
 using RemittanceAPI.V1.Models.Response;
 
@@ -38,7 +39,7 @@ namespace RemittanceAPI.Provider
             var response = new ExchangeRateResponse
             {
                 DestinationCountry = exchangeRateRequest.To,
-                ExchangeRate = "1.2",                            // TODO: should be decimal & Math.Round(per, 3)
+                ExchangeRate = new decimal(1.2),                
                 ExchangeRateToken = "123Ef5",
                 SourceCountry = exchangeRateRequest.From
             };
@@ -72,14 +73,18 @@ namespace RemittanceAPI.Provider
             return await Task.FromResult(states);
         }
 
-        public async Task<string> SubmitTransaction(TransactionRequest transactionRequest)
+        public async Task<SubmitTransactionResponse> SubmitTransaction(TransactionRequest transactionRequest)
         {
-            return await Task.FromResult(Guid.NewGuid().ToString());
+            return await Task.FromResult(new SubmitTransactionResponse()
+            {
+                TransactionStatus = TransactionStatus.Pending,
+                TransactionId = Guid.NewGuid()
+            });
         }
 
         public async Task<StatusResponse> GetTransactionStatus(StatusRequest statusRequest)
         {
-            var response = new StatusResponse() { Status = "Completed", TransactionId = statusRequest.TransactionId };
+            var response = new StatusResponse() { TransactionStatus = TransactionStatus.Successful, TransactionId = statusRequest.TransactionId };
             return await Task.FromResult(response);
         }
 

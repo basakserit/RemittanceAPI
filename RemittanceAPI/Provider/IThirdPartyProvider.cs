@@ -16,7 +16,7 @@ namespace RemittanceAPI.Provider
 
         public Task<StateResponse[]> GetStates(string accessKey);
 
-        public Task<string> SubmitTransaction(TransactionRequest transactionRequest);
+        public Task<SubmitTransactionResponse> SubmitTransaction(TransactionRequest transactionRequest);
 
         public Task<StatusResponse> GetTransactionStatus(StatusRequest statusRequest);
 

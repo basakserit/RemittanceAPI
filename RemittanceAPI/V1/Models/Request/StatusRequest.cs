@@ -8,7 +8,7 @@ namespace RemittanceAPI.V1.Models.Request
         [Required]
         public string AccessKey { get; set; }
         [Required]
-        public string TransactionId { get; set; } //TODO: Guid?
+        public Guid TransactionId { get; set; }
     }
     
 }

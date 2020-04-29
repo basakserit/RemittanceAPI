@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using RemittanceAPI.Validators;
 
 namespace RemittanceAPI.V1.Models.Request
@@ -47,7 +46,7 @@ namespace RemittanceAPI.V1.Models.Request
         [Required]
         public string ExchangeRate { get; set; }
         [Required] 
-        public int Fees { get; set; } = 0;
+        public decimal Fees { get; set; } = 0;
         [Required, MinLength(10), MaxLength(25)]
         public string TransactionNumber { get; set; }
         [Required, CurrencyValidator(ErrorMessage = "Currency code should be valid.")]

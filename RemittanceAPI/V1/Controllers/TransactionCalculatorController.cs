@@ -25,12 +25,12 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(ExchangeRateResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public IActionResult GetExchangeRate([FromQuery] ExchangeRateRequest request)
+        public async Task<IActionResult> GetExchangeRate([FromQuery] ExchangeRateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(_transactionCalculatorService.GetExchangeRate(request).Result);
+            return Ok(await _transactionCalculatorService.GetExchangeRate(request));
         }
 
         [HttpGet("GetFeeList")]
@@ -38,12 +38,12 @@ namespace RemittanceAPI.V1.Controllers
         [ProducesResponseType(typeof(ICollection<FeeResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public IActionResult GetFeeList([FromQuery] FeeRequest request)
+        public async Task<IActionResult> GetFeeList([FromQuery] FeeRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(_transactionCalculatorService.GetFees(request).Result);
+            return Ok(await _transactionCalculatorService.GetFees(request));
         }
 
     }

@@ -1,14 +1,16 @@
-﻿using System.Configuration;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using Newtonsoft.Json;
 using RemittanceAPI.Exceptions;
 using RemittanceAPI.Service;
 using RemittanceAPI.V1.Models.Request;
 using RemittanceAPI.V1.Models.Response;
+using TransactionStatus = RemittanceAPI.Entity.TransactionStatus;
 
 namespace RemittanceAPI.Provider
 {
@@ -34,7 +36,6 @@ namespace RemittanceAPI.Provider
         {
             using var client = new HttpClient();
             var requestJson = JsonConvert.SerializeObject(bankRequest);
-            // var request = $"{{accessKey: {accessKey}, country: {country}}}";
             var result = await client.PostAsync($"{_configurationService.ThirdPartyRemittanceServiceUrl}/get-bank-list",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
 
@@ -68,13 +69,20 @@ namespace RemittanceAPI.Provider
             return EvaluateCall<StateResponse[]>(result);
         }
 
-        public async Task<string> SubmitTransaction(TransactionRequest transactionRequest)
+        public async Task<SubmitTransactionResponse> SubmitTransaction(TransactionRequest transactionRequest)
         {
             using var client = new HttpClient();
             var requestJson = JsonConvert.SerializeObject(transactionRequest);
-            var result = await client.PostAsync($"{_configurationService.ThirdPartyRemittanceServiceUrl}/get-fees-list",
+            var response = await client.PostAsync($"{_configurationService.ThirdPartyRemittanceServiceUrl}/get-fees-list",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
-            return EvaluateCall<string>(result);
+
+            var transactionId = EvaluateCall<Guid>(response);
+
+            return new SubmitTransactionResponse()
+            {
+                TransactionId = transactionId, 
+                TransactionStatus = response.StatusCode == HttpStatusCode.Created ? TransactionStatus.Pending : TransactionStatus.Successful
+            };
         }
 
         public async Task<StatusResponse> GetTransactionStatus(StatusRequest statusRequest)
@@ -83,7 +91,13 @@ namespace RemittanceAPI.Provider
             var requestJson = JsonConvert.SerializeObject(statusRequest);
             var result = await client.PostAsync($"{ _configurationService.ThirdPartyRemittanceServiceUrl}/get-transaction-status",
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
-            return EvaluateCall<StatusResponse>(result);
+            
+            var statusResponse = EvaluateCall<StatusResponse>(result);
+            statusResponse.TransactionStatus = result.StatusCode == HttpStatusCode.Created
+                ? TransactionStatus.Pending
+                : TransactionStatus.Successful;
+
+            return statusResponse;
         }
 
         public async Task<BeneficiaryResponse> GetBeneficiaryName(BeneficiaryRequest beneficiaryRequest)
@@ -106,14 +120,6 @@ namespace RemittanceAPI.Provider
                     var errorMessage = JsonConvert
                         .DeserializeObject<ThirdPartyProviderErrorMessage>(result.Content.ToString()).Error;
                     throw new ThirdPartyException(errorMessage);
-
-                    //TODO: format error message with the code
-                    /*
-                     *     440 Failed
-                           {
-                           “error”: “Failed to get transaction status”
-                           }
-                     */
             }
         }
     }
