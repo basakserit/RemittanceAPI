@@ -24,6 +24,10 @@ namespace RemittanceAPI.UnitTest
             thirdPartyProviderMock.Setup(x => x.GetFees(It.IsAny<FeeRequest>()))
                 .Returns(Task.FromResult(new FeeResponse[] { new FeeResponse() {Amount = 100, Fee = 10}, new FeeResponse() { Amount = 300, Fee = 15 } }));
 
+            thirdPartyProviderMock.Setup(x => x.GetFees(It.IsAny<FeeRequest>()))
+                .Returns(Task.FromResult(new FeeResponse[] { new FeeResponse() { Amount = 100, Fee = 10 }, new FeeResponse() { Amount = 300, Fee = 15 } }));
+
+
             transactionCalculatorService = new TransactionCalculatorService(thirdPartyProviderMock.Object);
         }
 
@@ -33,7 +37,7 @@ namespace RemittanceAPI.UnitTest
             var result = await transactionCalculatorService.GetExchangeRate(new ExchangeRateRequest() { AccessKey = testAccessKey, From = "US", To = "TRY" });
             Assert.Equal("United States", result.SourceCountry);
             Assert.Equal("Turkey", result.DestinationCountry);
-            Assert.Equal(6.999M, result.ExchangeRate);
+            Assert.Equal((decimal)6.999, result.ExchangeRate);
             Assert.Equal("ABCD", result.ExchangeRateToken);
         }
 

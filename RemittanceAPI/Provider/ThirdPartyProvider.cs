@@ -77,11 +77,28 @@ namespace RemittanceAPI.Provider
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
 
             var transactionId = EvaluateCall<Guid>(response);
+            TransactionStatus transactionStatusValue = TransactionStatus.Completed;
+
+            switch (response.StatusCode)
+            {
+                case (HttpStatusCode.Created):
+                    transactionStatusValue = TransactionStatus.Pending;
+                    break;
+                case (HttpStatusCode.OK):
+                    transactionStatusValue = TransactionStatus.Completed;
+                    break;
+                case (HttpStatusCode.Accepted):
+                    transactionStatusValue = TransactionStatus.Canceled;
+                    break;
+                case (HttpStatusCode.NonAuthoritativeInformation):
+                    transactionStatusValue = TransactionStatus.Declined;
+                    break;
+            }
 
             return new SubmitTransactionResponse()
             {
                 TransactionId = transactionId, 
-                TransactionStatus = response.StatusCode == HttpStatusCode.Created ? TransactionStatus.Pending : TransactionStatus.Successful
+                TransactionStatus = transactionStatusValue
             };
         }
 
@@ -93,9 +110,26 @@ namespace RemittanceAPI.Provider
                 new StringContent(requestJson, Encoding.UTF8, MediaTypeNames.Application.Json));
             
             var statusResponse = EvaluateCall<StatusResponse>(result);
-            statusResponse.TransactionStatus = result.StatusCode == HttpStatusCode.Created
-                ? TransactionStatus.Pending
-                : TransactionStatus.Successful;
+
+            TransactionStatus transactionStatusValue = TransactionStatus.Completed;
+
+            switch (result.StatusCode)
+            {
+                case (HttpStatusCode.Created):
+                    transactionStatusValue = TransactionStatus.Pending;
+                    break;
+                case (HttpStatusCode.OK):
+                    transactionStatusValue = TransactionStatus.Completed;
+                    break;
+                case (HttpStatusCode.Accepted):
+                    transactionStatusValue = TransactionStatus.Canceled;
+                    break;
+                case (HttpStatusCode.NonAuthoritativeInformation):
+                    transactionStatusValue = TransactionStatus.Declined;
+                    break;
+            }
+
+            statusResponse.TransactionStatus = transactionStatusValue;
 
             return statusResponse;
         }
@@ -115,6 +149,8 @@ namespace RemittanceAPI.Provider
             {
                 case HttpStatusCode.OK:
                 case HttpStatusCode.Created:
+                case HttpStatusCode.Accepted:
+                case HttpStatusCode.NonAuthoritativeInformation:
                     return JsonConvert.DeserializeObject<T>(result.Content.ToString());
                 default:
                     var errorMessage = JsonConvert

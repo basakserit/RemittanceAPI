@@ -21,8 +21,7 @@ namespace RemittanceAPI.V1.Controllers
 
         [HttpPost("SubmitTransaction")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK), 
-         ProducesResponseType(typeof(string), StatusCodes.Status201Created)]  //TODO: 201 Success. Pending payout to beneficiary
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)] 
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SubmitTransaction([FromBody] TransactionRequest request)

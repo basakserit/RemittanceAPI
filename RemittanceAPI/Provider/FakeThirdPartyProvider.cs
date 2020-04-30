@@ -84,7 +84,7 @@ namespace RemittanceAPI.Provider
 
         public async Task<StatusResponse> GetTransactionStatus(StatusRequest statusRequest)
         {
-            var response = new StatusResponse() { TransactionStatus = TransactionStatus.Successful, TransactionId = statusRequest.TransactionId };
+            var response = new StatusResponse() { TransactionStatus = TransactionStatus.Completed, TransactionId = statusRequest.TransactionId };
             return await Task.FromResult(response);
         }
 

@@ -42,9 +42,9 @@ namespace RemittanceAPI.V1.Models.Request
         [Required] 
         public string ToBankCode { get; set; }
         [Required] 
-        public string FromAmount { get; set; }
+        public decimal FromAmount { get; set; }
         [Required]
-        public string ExchangeRate { get; set; }
+        public decimal ExchangeRate { get; set; }
         [Required] 
         public decimal Fees { get; set; } = 0;
         [Required, MinLength(10), MaxLength(25)]
