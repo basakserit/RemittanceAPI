@@ -17,7 +17,9 @@ namespace RemittanceAPI.Service
 
         public async Task<ExchangeRateResponse> GetExchangeRate(ExchangeRateRequest exchangeRateRequest)
         {
-            return await _thirdPartyProvider.GetExchangeRate(exchangeRateRequest);
+            ExchangeRateResponse response = await _thirdPartyProvider.GetExchangeRate(exchangeRateRequest);
+            response.ExchangeRate = (decimal)System.Math.Round(response.ExchangeRate, 3);
+            return response;
         }
 
         public async Task<ICollection<FeeResponse>> GetFees(FeeRequest feeRequest)
