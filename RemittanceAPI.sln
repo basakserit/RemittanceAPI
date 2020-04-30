@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemittanceAPI", "RemittanceAPI\RemittanceAPI.csproj", "{A91631EE-E465-472A-8A83-2A706F10C30C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemittanceAPI.Entity", "RemittanceAPI.Entity\RemittanceAPI.Entity.csproj", "{452E283E-58C0-4BF5-A315-399B75D3D6F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemittanceAPI.Entity", "RemittanceAPI.Entity\RemittanceAPI.Entity.csproj", "{452E283E-58C0-4BF5-A315-399B75D3D6F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemittanceAPI.UnitTest", "RemittanceAPI.UnitTest\RemittanceAPI.UnitTest.csproj", "{ED621EF0-039B-425E-9910-A7D87BB48D3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemittanceAPI.Test", "RemittanceAPI.UnitTest\RemittanceAPI.Test.csproj", "{ED621EF0-039B-425E-9910-A7D87BB48D3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -73,8 +73,7 @@ namespace RemittanceAPI
                 });
             });
 
-            services.AddTransient<IThirdPartyProvider, FakeThirdPartyProvider>();
-            // services.AddTransient<IThirdPartyProvider, ThirdPartyProvider>();
+            services.AddTransient<IThirdPartyProvider, ThirdPartyProvider>();
             services.AddTransient<IBeneficiaryManagementService, BeneficiaryManagementService>();
             services.AddTransient<IConfigurationService, ConfigurationService>();
             services.AddTransient<ITransactionCalculatorService, TransactionCalculatorService>();

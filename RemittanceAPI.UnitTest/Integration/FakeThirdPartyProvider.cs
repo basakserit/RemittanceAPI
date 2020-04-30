@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using RemittanceAPI.Entity;
+using RemittanceAPI.Provider;
 using RemittanceAPI.V1.Models.Request;
 using RemittanceAPI.V1.Models.Response;
 
-namespace RemittanceAPI.Provider
+namespace RemittanceAPI.Test.Integration
 {
     public class FakeThirdPartyProvider : IThirdPartyProvider
     {
