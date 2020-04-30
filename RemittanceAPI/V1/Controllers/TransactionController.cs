@@ -22,7 +22,7 @@ namespace RemittanceAPI.V1.Controllers
         [HttpPost("SubmitTransaction")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)] 
-        [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SubmitTransaction([FromBody] TransactionRequest request)
         {
@@ -35,7 +35,7 @@ namespace RemittanceAPI.V1.Controllers
         [HttpGet("GetTransactionStatus")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(StatusResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetTransactionStatus([FromQuery] StatusRequest request)
         {

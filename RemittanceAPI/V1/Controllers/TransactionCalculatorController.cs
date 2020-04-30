@@ -23,7 +23,7 @@ namespace RemittanceAPI.V1.Controllers
         [HttpGet("GetExchangeRate")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ExchangeRateResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetExchangeRate([FromQuery] ExchangeRateRequest request)
         {
@@ -36,7 +36,7 @@ namespace RemittanceAPI.V1.Controllers
         [HttpGet("GetFeeList")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ICollection<FeeResponse>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetFeeList([FromQuery] FeeRequest request)
         {

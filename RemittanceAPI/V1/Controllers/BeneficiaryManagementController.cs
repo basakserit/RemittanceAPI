@@ -50,7 +50,7 @@ namespace RemittanceAPI.V1.Controllers
         [HttpGet("GetStateList")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<StateResponse>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetStateList([Required, FromQuery] string accessKey)
         {
@@ -64,7 +64,7 @@ namespace RemittanceAPI.V1.Controllers
         [HttpGet("GetBankList")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<BankResponse>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetBankList([FromQuery] BankRequest request)
         {
